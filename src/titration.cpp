@@ -52,16 +52,55 @@ int GetSummit(curve c)
 	return summitID;
 }
 
+double getPreciseSummit(curve c, int roughtID)
+{
+	double preciseID = 0;
+	double pID_data = c.ph[roughtID - 1];
+
+	cout << fixed << setprecision(1) << c.vol[roughtID - 1] << " ml -> " << setprecision(2) << c.ph[roughtID - 1] << endl;
+	for (int i = (int)(c.vol[roughtID - 1] * 10) + 1; i < (int)(c.vol[roughtID] * 10); i++) {
+		double coef = (c.ph[roughtID] - c.ph[roughtID - 1]) / ((int)(c.vol[roughtID] * 10) - (int)(c.vol[roughtID - 1] * 10));
+		int iter = i - (int)(c.vol[roughtID - 1] * 10);
+		float result = c.ph[roughtID - 1] + coef * iter;
+		cout << fixed << setprecision(1) << i / 10.0 << " ml -> " << setprecision(2) << result << endl;
+		if (pID_data > abs(result)) {
+			preciseID = i / 10.0;
+			pID_data = abs(result);
+		}
+	}
+	cout << fixed << setprecision(1) << c.vol[roughtID] << " ml -> " << setprecision(2) << c.ph[roughtID] << endl;
+	if (pID_data > abs(c.ph[roughtID])) {
+		preciseID = c.vol[roughtID];
+		pID_data = abs(c.ph[roughtID]);
+	}
+	for (int i = (int)(c.vol[roughtID] * 10) + 1; i < (int)(c.vol[roughtID + 1] * 10); i++) {
+		double coef = (c.ph[roughtID + 1] - c.ph[roughtID]) / ((int)(c.vol[roughtID + 1] * 10) - (int)(c.vol[roughtID] * 10));
+		int iter = i - (int)(c.vol[roughtID] * 10);
+		float result = c.ph[roughtID] + coef * iter + 0.001;
+		cout << fixed << setprecision(1) << i / 10.0 << " ml -> " << setprecision(2) << result << endl;
+		if (pID_data > abs(result)) {
+			preciseID = i / 10.0;
+			pID_data = abs(result);
+		}
+	}
+	cout << fixed << setprecision(1) << c.vol[roughtID + 1] << " ml -> " << setprecision(2) << c.ph[roughtID + 1] << endl;
+	return preciseID;
+}
+
 int titration(curve c)
 {
 
 	cout << "Derivative:" << endl;
 	curve dc = derive(c);
 
-	cout << endl << "Equivalence point at " << fixed << setprecision(1) << dc.vol[GetSummit(dc)] << " ml" << endl << endl;
+	int summitID = GetSummit(dc);
+	cout << endl << "Equivalence point at " << fixed << setprecision(1) << dc.vol[summitID] << " ml" << endl << endl;
 
 	cout << "Second derivative:" << endl;
 	curve fc = derive(dc);
 
+	cout << endl << "Second derivative estimated:" << endl;
+	double preciseID = getPreciseSummit(fc, summitID - 1);
+	cout << endl << "Equivalence point at " << fixed << setprecision(1) << preciseID << " ml" << endl << endl;
 	return 0;
 }
