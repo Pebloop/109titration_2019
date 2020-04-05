@@ -5,10 +5,18 @@
 ** 108trigo functions
 */
 
+#include <vector>
+
 #ifndef TITRATION_H
 #define TITRATION_H
 
-int titration(void);
+struct curve
+{
+    std::vector <double>vol;
+    std::vector <double>ph;
+};
 
+int titration(curve c);
+int GetCurveFromCSV(char *filename, curve &c);
 
 #endif /*TITRATION_H*/

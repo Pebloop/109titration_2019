@@ -1,6 +1,7 @@
 .PHONY = debug retest re
 
 SRC =   src/titration.cpp		\
+		src/GetCurveFromCSV.cpp	\
 
 MAIN =  main.cpp
 

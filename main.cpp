@@ -30,10 +30,14 @@ int display_usage()
 
 int main(int argc, char *argv[])
 {
-	if (argc != 2)
-	 return 84;
+	if (argc != 2) {
+		perror("wrong number of arguments, exit program\n");
+		return 84;
+	}
 	if (argc == 2 && !strcmp(argv[1], "-h"))
 		return display_usage();
-	
-	return 0;
+	curve c = {vector<double>(), vector<double>()};
+	if (GetCurveFromCSV(argv[1], c))
+		return 84;
+	return titration(c);
 }
