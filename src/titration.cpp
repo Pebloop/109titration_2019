@@ -90,14 +90,23 @@ double getPreciseSummit(curve c, int roughtID)
 int titration(curve c)
 {
 
+	if (c.vol.size() < 3)
+		return 84;
+
 	cout << "Derivative:" << endl;
 	curve dc = derive(c);
+
+	if (dc.vol.size() < 3)
+		return 84;
 
 	int summitID = GetSummit(dc);
 	cout << endl << "Equivalence point at " << fixed << setprecision(1) << dc.vol[summitID] << " ml" << endl << endl;
 
 	cout << "Second derivative:" << endl;
 	curve fc = derive(dc);
+
+	if (fc.vol.size() < 3)
+		return 84;
 
 	cout << endl << "Second derivative estimated:" << endl;
 	double preciseID = getPreciseSummit(fc, summitID - 1);
