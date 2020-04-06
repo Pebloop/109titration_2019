@@ -110,6 +110,6 @@ int titration(curve c)
 
 	cout << endl << "Second derivative estimated:" << endl;
 	double preciseID = getPreciseSummit(fc, summitID - 1);
-	cout << endl << "Equivalence point at " << fixed << setprecision(1) << preciseID << " ml" << endl << endl;
+	cout << endl << "Equivalence point at " << fixed << setprecision(1) << preciseID << " ml" << endl;
 	return 0;
 }
